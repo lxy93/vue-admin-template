@@ -6,26 +6,28 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({ showSpinner: false }) // 进度条配置  ,showSpinner——进度环显示隐藏
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login'] // 无重定向白名单
 
+// 导航守卫
 router.beforeEach(async(to, from, next) => {
-  // start progress bar
+  // 开始进度条
   NProgress.start()
 
   // set page title
   document.title = getPageTitle(to.meta.title)
 
-  // determine whether the user has logged in
+  // 确定用户是否已登录
   const hasToken = getToken()
 
   if (hasToken) {
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
+      // 如果已登录，请重定向到home page
       next({ path: '/' })
       NProgress.done()
     } else {
+      console.log(store)
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
         next()

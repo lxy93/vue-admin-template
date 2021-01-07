@@ -8,17 +8,17 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
-// If your port is set to 80,
-// use administrator privileges to execute the command line.
+// 如果端口设置为80,
+// 使用管理员权限执行命令行.
 // For example, Mac: sudo npm run
-// You can change the port by the following methods:
-// port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+// 您可以通过以下方法更改端口:
+// port = 8899 npm run dev OR npm run dev --port = 8899
+const port = process.env.port || process.env.npm_config_port || 8899 // dev port
 
-// All configuration item explanations can be find in https://cli.vuejs.org/config/
+// 所有配置项说明可在中找到 https://cli.vuejs.org/config/
 module.exports = {
   /**
-   * You will need to set publicPath if you plan to deploy your site under a sub path,
+   * 如果计划在子路径下部署站点，则需要设置publicPath,
    * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
    * then publicPath should be set to "/bar/".
    * In most cases please use '/' !!!
@@ -27,7 +27,8 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  // lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: false,//禁用eslint
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -36,7 +37,16 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    //before: require('./mock/mock-server.js') //mock 模拟数据
+    
+    //跨域配置
+    proxy:{
+      //key:value,
+      '/api':{
+        target:"https://baidu.com",//跨域请求的地址
+        changeOrigin:true//这个为true的时候才能跨域
+      }
+    },
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
